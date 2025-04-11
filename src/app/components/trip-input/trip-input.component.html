@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="form-wrapper">
+    <div class="form-content">
+      <div class="trip-input-heading">Trip Details</div>
+      <form (ngSubmit)="addTrip()" #tripForm="ngForm" class="form">
+        <input type="text" [(ngModel)]="start" name="start" placeholder="Start Point" required />
+        <input type="text" [(ngModel)]="end" name="end" placeholder="End Point" required />
+        <button type="submit">Add Trip</button>
+      </form>
+
+    </div>
+  </div>
+</div>

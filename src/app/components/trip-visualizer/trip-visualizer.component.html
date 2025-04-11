@@ -1,0 +1,69 @@
+<h2 class="trip-heading">Trip Visualizer</h2>
+
+<!-- Scrollable Container -->
+<div class="trip-container" #scrollContainer>
+  <svg [attr.width]="svgWidth" height="160">
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 Z" fill="#FFA500" />
+      </marker>
+    </defs>
+
+    <!-- Curves Up -->
+    <ng-container *ngFor="let trip of trips; let i = index">
+      <ng-container *ngIf="isTransitionToRepeated(i)">
+        <path [attr.d]="generateCurveUp(i)" class="curve-up" />
+      </ng-container>
+    </ng-container>
+
+    <!-- Repeated Lines -->
+    <ng-container *ngFor="let trip of trips; let i = index">
+      <ng-container *ngIf="isRepeatedTrip(i)">
+        <path [attr.d]="generateRepeatedLine(i)" class="repeated-line" />
+      </ng-container>
+    </ng-container>
+
+    <!-- Curves Down -->
+    <ng-container *ngFor="let trip of trips; let i = index">
+      <ng-container *ngIf="isTransitionFromRepeated(i)">
+        <path [attr.d]="generateCurveDown(i)" class="curve-down" />
+      </ng-container>
+    </ng-container>
+
+    <!-- Straight Lines -->
+    <ng-container *ngFor="let trip of trips; let i = index">
+      <ng-container *ngIf="!isRepeatedTrip(i) && !isTransitionToRepeated(i)">
+        <line
+          *ngIf="i + 1 < trips.length"
+          [attr.x1]="i * TRIP_SPACING + MARGIN"
+          [attr.y1]="LEVEL1_Y"
+          [attr.x2]="(i + 1) * TRIP_SPACING + MARGIN"
+          [attr.y2]="LEVEL1_Y"
+          [attr.stroke]="getTripType(i) === 'continued' ? '#4B5EAA' : '#FFA500'"
+          stroke-width="2"
+          [attr.marker-end]="getTripType(i) === 'non-continued' ? 'url(#arrowhead)' : null"
+        />
+      </ng-container>
+    </ng-container>
+
+    <!-- Circles and Labels -->
+    <ng-container *ngFor="let trip of trips; let i = index">
+      <circle
+        [attr.cx]="i * TRIP_SPACING + MARGIN"
+        [attr.cy]="getCircleY(i)"
+        r="6"
+        [attr.fill]="getCircleColor(i)"
+        stroke="black"
+        stroke-width="1"
+      />
+      <text
+        [attr.x]="i * TRIP_SPACING + MARGIN"
+        [attr.y]="getCircleY(i) + 20"
+        text-anchor="middle"
+        class="trip-label"
+      >
+        {{ trip.start }}-{{ trip.end }}
+      </text>
+    </ng-container>
+  </svg>
+</div>
