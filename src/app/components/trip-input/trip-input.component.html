@@ -5,7 +5,7 @@
       <form (ngSubmit)="addTrip()" #tripForm="ngForm" class="form">
         <input type="text" [(ngModel)]="start" name="start" placeholder="Start Point" required />
         <input type="text" [(ngModel)]="end" name="end" placeholder="End Point" required />
-        <button type="submit">Add Trip</button>
+        <button type="submit" [disabled]="!tripForm.valid">Add Trip</button>
       </form>
 
     </div>
